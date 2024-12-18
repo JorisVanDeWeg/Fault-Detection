@@ -1,0 +1,19 @@
+fold,best_params,test_accuracy,f1_score,model
+1,"{'C': 0.1, 'max_iter': 50, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.7822916666666667,0.7802957695930725,LogisticRegression
+2,"{'C': 100, 'max_iter': 50, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.41875,0.42372309704045574,LogisticRegression
+3,"{'C': 0.1, 'max_iter': 50, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.73375,0.703725680068601,LogisticRegression
+1,"{'C': 200, 'gamma': 'scale', 'kernel': 'poly', 'max_iter': 1000}",0.7895833333333333,0.7788063411411245,SVC
+2,"{'C': 100, 'gamma': 'scale', 'kernel': 'poly', 'max_iter': 500}",0.565625,0.49173193571135876,SVC
+3,"{'C': 100, 'gamma': 'scale', 'kernel': 'poly', 'max_iter': 2000}",0.7725,0.7532163482140143,SVC
+1,"{'class_weight': 'balanced', 'max_depth': None, 'min_samples_split': 10, 'n_estimators': 10}",0.7625,0.7367965367965369,RandomForestClassifier
+2,"{'class_weight': 'balanced_subsample', 'max_depth': 10, 'min_samples_split': 5, 'n_estimators': 50}",0.509375,0.440183283110456,RandomForestClassifier
+3,"{'class_weight': 'balanced_subsample', 'max_depth': 10, 'min_samples_split': 2, 'n_estimators': 150}",0.7175,0.6830637336326338,RandomForestClassifier
+1,"{'metric': 'euclidean', 'n_neighbors': 9, 'weights': 'distance'}",0.8,0.7974363032125336,KNeighborsClassifier
+2,"{'metric': 'manhattan', 'n_neighbors': 3, 'weights': 'uniform'}",0.44479166666666664,0.422218320560525,KNeighborsClassifier
+3,"{'metric': 'manhattan', 'n_neighbors': 3, 'weights': 'distance'}",0.7775,0.7519465304106906,KNeighborsClassifier
+1,"{'criterion': 'entropy', 'max_depth': None, 'min_samples_split': 10}",0.8510416666666667,0.8463563680256124,DecisionTreeClassifier
+2,"{'criterion': 'entropy', 'max_depth': None, 'min_samples_split': 10}",0.590625,0.5710197307763231,DecisionTreeClassifier
+3,"{'criterion': 'entropy', 'max_depth': None, 'min_samples_split': 2}",0.66625,0.6427430272715279,DecisionTreeClassifier
+1,{},0.6364583333333333,0.6510867038414637,GaussianNB
+2,{},0.384375,0.3831741684528063,GaussianNB
+3,{},0.66875,0.6365186106485092,GaussianNB

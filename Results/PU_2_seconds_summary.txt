@@ -1,0 +1,17 @@
+Performance Summary (Mean � Std):
+
+Method: random
+DecisionTreeClassifier: 0.9655 � 0.0073
+GaussianNB: 0.6523 � 0.0017
+KNeighborsClassifier: 0.9621 � 0.0061
+LogisticRegression: 0.7747 � 0.0061
+RandomForestClassifier: 0.9805 � 0.0032
+SVC: 0.9566 � 0.0028
+
+Method: grouped kfold
+DecisionTreeClassifier: 0.7026 � 0.1340
+GaussianNB: 0.5632 � 0.1557
+KNeighborsClassifier: 0.6741 � 0.1989
+LogisticRegression: 0.6449 � 0.1974
+RandomForestClassifier: 0.6631 � 0.1350
+SVC: 0.7092 � 0.1247

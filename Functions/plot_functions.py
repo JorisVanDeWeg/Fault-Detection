@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -40,7 +41,7 @@ def plot_combined_results(dataframes, labels, metric='test_accuracy', title='Per
     plt.show()
 
 
-def plot_combined_results2(dataframes, labels, metric='test_accuracy', title='Performance Comparison', plot_type='boxplot'):
+def plot_combined_results2(dataframes, labels, file_name, metric='test_accuracy', title='Performance Comparison', plot_type='boxplot'):
     """
     Combines multiple DataFrames and plots the performance of classifiers across methods.
 
@@ -51,6 +52,9 @@ def plot_combined_results2(dataframes, labels, metric='test_accuracy', title='Pe
     - title: str, the title for the plot.
     - plot_type: str, type of plot to use ('boxplot' or 'stripplot').
     """
+
+    results_dir = 'Results/'
+
     # Validate inputs
     if len(dataframes) != len(labels):
         raise ValueError("Number of DataFrames and labels must be the same.")
@@ -90,54 +94,25 @@ def plot_combined_results2(dataframes, labels, metric='test_accuracy', title='Pe
     plt.legend(title='Method')
     plt.xticks(rotation=45)
     plt.tight_layout()
-    plt.show()
+
+    # Save the plot
+    plot_filename = os.path.join(results_dir, f"{file_name}.png")
+    plt.savefig(plot_filename)
+    plt.close()
 
     # Compute mean +/- std for each method and model
     summary = combined_df.groupby(['model', 'method'])[metric].agg(['mean', 'std']).reset_index()
     summary['formatted'] = summary.apply(lambda row: f"{row['mean']:.4f} ± {row['std']:.4f}", axis=1)
-    
-    # Print formatted results
-    print("\nPerformance Summary (Mean ± Std):")
-    for method in labels:
-        print(f"\nMethod: {method}")
-        method_summary = summary[summary['method'] == method]
-        for _, row in method_summary.iterrows():
-            print(f"{row['model']}: {row['formatted']}")
 
-
-# def print_results(results_df):
-#     # Group by 'model' and compute mean and standard deviation
-#     model_summary = results_df.groupby('model').agg({
-#         'test_accuracy': ['mean', 'std'],
-#         'f1_score': ['mean', 'std']
-#     })
-
-#     # Combine mean and std into "mean ± std" format
-#     model_summary['Accuracy'] = model_summary[('test_accuracy', 'mean')].round(4).astype(str) + " ± " + model_summary[('test_accuracy', 'std')].round(4).astype(str)
-#     model_summary['F1-Score'] = model_summary[('f1_score', 'mean')].round(4).astype(str) + " ± " + model_summary[('f1_score', 'std')].round(4).astype(str)
-
-#     # Select relevant columns and reset index
-#     final_summary = model_summary[['Accuracy', 'F1-Score']].reset_index()
-
-#     # Display the formatted summary
-#     print(final_summary)
-
-#     # Optionally save to CSV
-#     final_summary.to_csv('model_performance_summary.csv', index=False)
-#     return
-
-# plt.figure(figsize=(10, 5))
-# sns.boxplot(data=final_results_pu, x='model', y='test_accuracy')
-# plt.title('Test Accuracy Across Folds (PU)')
-# plt.ylabel('Accuracy')
-# plt.xlabel('Model')
-# plt.xticks(rotation=45)
-# plt.show()
-
-# plt.figure(figsize=(10, 5))
-# sns.boxplot(data=final_results_pu, x='model', y='f1_score')
-# plt.title('F1 Score Across Folds (PU)')
-# plt.ylabel('F1 Score')
-# plt.xlabel('Model')
-# plt.xticks(rotation=45)
-# plt.show()
+    # Save the formatted results to a text file (and print)
+    results_filename = os.path.join(results_dir, f"{file_name}_summary.txt")
+    # print("\nPerformance Summary (Mean ± Std):")
+    with open(results_filename, 'w') as file:
+        file.write("Performance Summary (Mean ± Std):\n")
+        for method in labels:
+            file.write(f"\nMethod: {method}\n")
+            # print(f"\nMethod: {method}")
+            method_summary = summary[summary['method'] == method]
+            for _, row in method_summary.iterrows():
+                file.write(f"{row['model']}: {row['formatted']}\n")
+                # print(f"{row['model']}: {row['formatted']}")
