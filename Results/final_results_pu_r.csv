@@ -1,19 +1,19 @@
 fold,best_params,test_accuracy,f1_score,model
-1,"{'C': 1, 'max_iter': 100, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.7717750826901875,0.7532480235697628,LogisticRegression
-2,"{'C': 1, 'max_iter': 100, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.7706725468577729,0.7570305577121154,LogisticRegression
-3,"{'C': 1, 'max_iter': 100, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.7816979051819184,0.7613792771337583,LogisticRegression
-1,"{'C': 200, 'gamma': 'scale', 'kernel': 'rbf', 'max_iter': 2000}",0.9592061742006616,0.9576371949375626,SVC
-2,"{'C': 200, 'gamma': 'scale', 'kernel': 'rbf', 'max_iter': 500}",0.9536934950385888,0.9514537703943554,SVC
-3,"{'C': 200, 'gamma': 'scale', 'kernel': 'rbf', 'max_iter': 1000}",0.9570011025358324,0.9547393063618211,SVC
-1,"{'class_weight': None, 'max_depth': None, 'min_samples_split': 2, 'n_estimators': 150}",0.9823594266813671,0.9815319537789814,RandomForestClassifier
-2,"{'class_weight': 'balanced', 'max_depth': None, 'min_samples_split': 2, 'n_estimators': 150}",0.9768467475192943,0.9757548601437046,RandomForestClassifier
-3,"{'class_weight': None, 'max_depth': None, 'min_samples_split': 5, 'n_estimators': 50}",0.9823594266813671,0.981550737500938,RandomForestClassifier
-1,"{'metric': 'manhattan', 'n_neighbors': 3, 'weights': 'distance'}",0.9691289966923925,0.9679320767432782,KNeighborsClassifier
-2,"{'metric': 'manhattan', 'n_neighbors': 5, 'weights': 'distance'}",0.9592061742006616,0.9577407198924227,KNeighborsClassifier
-3,"{'metric': 'manhattan', 'n_neighbors': 5, 'weights': 'distance'}",0.958103638368247,0.9564161922566053,KNeighborsClassifier
-1,"{'criterion': 'gini', 'max_depth': None, 'min_samples_split': 2}",0.9592061742006616,0.9583410054425853,DecisionTreeClassifier
-2,"{'criterion': 'entropy', 'max_depth': None, 'min_samples_split': 5}",0.9735391400220507,0.9725551754989454,DecisionTreeClassifier
-3,"{'criterion': 'entropy', 'max_depth': None, 'min_samples_split': 2}",0.9636163175303197,0.9624683150082065,DecisionTreeClassifier
-1,{},0.6504961411245865,0.6338133820354258,GaussianNB
-2,{},0.6538037486218302,0.6396268839466596,GaussianNB
-3,{},0.6527012127894156,0.6392014509289589,GaussianNB
+1,"{'C': 10, 'max_iter': 50, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.775330396475771,0.7588508592544757,LogisticRegression
+2,"{'C': 10, 'max_iter': 50, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.7687224669603524,0.7557319285923324,LogisticRegression
+3,"{'C': 1, 'max_iter': 50, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.751101321585903,0.7255412337122328,LogisticRegression
+1,"{'C': 200, 'gamma': 'scale', 'kernel': 'rbf', 'max_iter': 500}",0.9713656387665198,0.9702656312163264,SVC
+2,"{'C': 200, 'gamma': 'scale', 'kernel': 'rbf', 'max_iter': 500}",0.9537444933920705,0.9517733487996063,SVC
+3,"{'C': 200, 'gamma': 'scale', 'kernel': 'rbf', 'max_iter': 500}",0.9581497797356828,0.956215871020977,SVC
+1,"{'class_weight': 'balanced', 'max_depth': None, 'min_samples_split': 2, 'n_estimators': 50}",0.9779735682819384,0.9770088109473544,RandomForestClassifier
+2,"{'class_weight': 'balanced_subsample', 'max_depth': None, 'min_samples_split': 2, 'n_estimators': 150}",0.9669603524229075,0.9657149867627721,RandomForestClassifier
+3,"{'class_weight': 'balanced', 'max_depth': None, 'min_samples_split': 2, 'n_estimators': 50}",0.9801762114537445,0.9792988203103326,RandomForestClassifier
+1,"{'metric': 'manhattan', 'n_neighbors': 3, 'weights': 'distance'}",0.9801762114537445,0.9795704028298092,KNeighborsClassifier
+2,"{'metric': 'manhattan', 'n_neighbors': 5, 'weights': 'distance'}",0.9537444933920705,0.9521316930844872,KNeighborsClassifier
+3,"{'metric': 'manhattan', 'n_neighbors': 3, 'weights': 'distance'}",0.9713656387665198,0.9701011448423067,KNeighborsClassifier
+1,"{'criterion': 'entropy', 'max_depth': None, 'min_samples_split': 2}",0.9669603524229075,0.9660182427401341,DecisionTreeClassifier
+2,"{'criterion': 'entropy', 'max_depth': None, 'min_samples_split': 5}",0.9559471365638766,0.9544942982849917,DecisionTreeClassifier
+3,"{'criterion': 'entropy', 'max_depth': None, 'min_samples_split': 5}",0.9559471365638766,0.9544228977405078,DecisionTreeClassifier
+1,{},0.6828193832599119,0.6695539840293984,GaussianNB
+2,{},0.6189427312775331,0.6071937442678246,GaussianNB
+3,{},0.6541850220264317,0.6269327856563317,GaussianNB

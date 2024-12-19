@@ -94,7 +94,7 @@ def load_pu_dataset(base_dir_list, window_duration, overlap, signal_indices, cla
         (4) : 'temp_2_bearing_module'
         (5) : 'torque'
         (6) : 'vibration_1'
-    - classification_type (str) : binary/multiclass (see functiondeduce_labels_pu)
+    - classification_type (str) : binary/multiclass (see function deduce_labels_pu)
 
     Returns:
     - features (dict): Features and their associated labels

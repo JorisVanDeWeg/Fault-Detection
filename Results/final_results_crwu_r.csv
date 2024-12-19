@@ -1,0 +1,19 @@
+fold,best_params,test_accuracy,f1_score,model
+1,"{'C': 150, 'max_iter': 50, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.7454545454545455,0.711857585139319,LogisticRegression
+2,"{'C': 10, 'max_iter': 50, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.7818181818181819,0.7737867177522351,LogisticRegression
+3,"{'C': 10, 'max_iter': 50, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.7636363636363637,0.7475180198558412,LogisticRegression
+1,"{'C': 100, 'gamma': 'scale', 'kernel': 'rbf', 'max_iter': 500}",0.9818181818181818,0.9813384813384813,SVC
+2,"{'C': 100, 'gamma': 'scale', 'kernel': 'rbf', 'max_iter': 500}",0.8363636363636363,0.8283208020050126,SVC
+3,"{'C': 200, 'gamma': 'auto', 'kernel': 'rbf', 'max_iter': 500}",0.9454545454545454,0.945097695097695,SVC
+1,"{'class_weight': 'balanced', 'max_depth': None, 'min_samples_split': 5, 'n_estimators': 150}",1.0,1.0,RandomForestClassifier
+2,"{'class_weight': 'balanced', 'max_depth': None, 'min_samples_split': 2, 'n_estimators': 150}",0.9818181818181818,0.9772256728778468,RandomForestClassifier
+3,"{'class_weight': 'balanced', 'max_depth': None, 'min_samples_split': 2, 'n_estimators': 100}",0.9636363636363636,0.9573736780258519,RandomForestClassifier
+1,"{'metric': 'manhattan', 'n_neighbors': 3, 'weights': 'distance'}",0.9818181818181818,0.9772256728778468,KNeighborsClassifier
+2,"{'metric': 'manhattan', 'n_neighbors': 3, 'weights': 'distance'}",0.9272727272727272,0.9222473178994918,KNeighborsClassifier
+3,"{'metric': 'manhattan', 'n_neighbors': 9, 'weights': 'distance'}",0.8727272727272727,0.8671197223828803,KNeighborsClassifier
+1,"{'criterion': 'gini', 'max_depth': None, 'min_samples_split': 10}",1.0,1.0,DecisionTreeClassifier
+2,"{'criterion': 'gini', 'max_depth': None, 'min_samples_split': 2}",0.9272727272727272,0.9241371961078284,DecisionTreeClassifier
+3,"{'criterion': 'entropy', 'max_depth': None, 'min_samples_split': 10}",0.9818181818181818,0.9847926267281106,DecisionTreeClassifier
+1,{},0.6545454545454545,0.6264811609639196,GaussianNB
+2,{},0.45454545454545453,0.45635231626610934,GaussianNB
+3,{},0.6181818181818182,0.5617660343270099,GaussianNB

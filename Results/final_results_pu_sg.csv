@@ -1,19 +1,19 @@
 fold,best_params,test_accuracy,f1_score,model
-1,"{'C': 0.1, 'max_iter': 50, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.7822916666666667,0.7802957695930725,LogisticRegression
-2,"{'C': 100, 'max_iter': 50, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.41875,0.42372309704045574,LogisticRegression
-3,"{'C': 0.1, 'max_iter': 50, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.73375,0.703725680068601,LogisticRegression
-1,"{'C': 200, 'gamma': 'scale', 'kernel': 'poly', 'max_iter': 1000}",0.7895833333333333,0.7788063411411245,SVC
-2,"{'C': 100, 'gamma': 'scale', 'kernel': 'poly', 'max_iter': 500}",0.565625,0.49173193571135876,SVC
-3,"{'C': 100, 'gamma': 'scale', 'kernel': 'poly', 'max_iter': 2000}",0.7725,0.7532163482140143,SVC
-1,"{'class_weight': 'balanced', 'max_depth': None, 'min_samples_split': 10, 'n_estimators': 10}",0.7625,0.7367965367965369,RandomForestClassifier
-2,"{'class_weight': 'balanced_subsample', 'max_depth': 10, 'min_samples_split': 5, 'n_estimators': 50}",0.509375,0.440183283110456,RandomForestClassifier
-3,"{'class_weight': 'balanced_subsample', 'max_depth': 10, 'min_samples_split': 2, 'n_estimators': 150}",0.7175,0.6830637336326338,RandomForestClassifier
-1,"{'metric': 'euclidean', 'n_neighbors': 9, 'weights': 'distance'}",0.8,0.7974363032125336,KNeighborsClassifier
-2,"{'metric': 'manhattan', 'n_neighbors': 3, 'weights': 'uniform'}",0.44479166666666664,0.422218320560525,KNeighborsClassifier
-3,"{'metric': 'manhattan', 'n_neighbors': 3, 'weights': 'distance'}",0.7775,0.7519465304106906,KNeighborsClassifier
-1,"{'criterion': 'entropy', 'max_depth': None, 'min_samples_split': 10}",0.8510416666666667,0.8463563680256124,DecisionTreeClassifier
-2,"{'criterion': 'entropy', 'max_depth': None, 'min_samples_split': 10}",0.590625,0.5710197307763231,DecisionTreeClassifier
-3,"{'criterion': 'entropy', 'max_depth': None, 'min_samples_split': 2}",0.66625,0.6427430272715279,DecisionTreeClassifier
-1,{},0.6364583333333333,0.6510867038414637,GaussianNB
-2,{},0.384375,0.3831741684528063,GaussianNB
-3,{},0.66875,0.6365186106485092,GaussianNB
+1,"{'C': 0.1, 'max_iter': 50, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.7729166666666667,0.7704757298483548,LogisticRegression
+2,"{'C': 200, 'max_iter': 50, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.4270833333333333,0.42228006858208983,LogisticRegression
+3,"{'C': 1, 'max_iter': 100, 'multi_class': 'multinomial', 'penalty': 'l2', 'solver': 'lbfgs'}",0.7325,0.6988740559929214,LogisticRegression
+1,"{'C': 100, 'gamma': 'scale', 'kernel': 'linear', 'max_iter': 500}",0.66875,0.6730929473228615,SVC
+2,"{'C': 10, 'gamma': 'auto', 'kernel': 'poly', 'max_iter': 500}",0.575,0.5048162791927945,SVC
+3,"{'C': 100, 'gamma': 'scale', 'kernel': 'poly', 'max_iter': 2000}",0.765,0.7458073558552027,SVC
+1,"{'class_weight': None, 'max_depth': 10, 'min_samples_split': 5, 'n_estimators': 100}",0.7541666666666667,0.7238676085589341,RandomForestClassifier
+2,"{'class_weight': 'balanced_subsample', 'max_depth': None, 'min_samples_split': 10, 'n_estimators': 10}",0.5041666666666667,0.4804881650084049,RandomForestClassifier
+3,"{'class_weight': 'balanced', 'max_depth': 10, 'min_samples_split': 5, 'n_estimators': 150}",0.7175,0.6825195478899638,RandomForestClassifier
+1,"{'metric': 'euclidean', 'n_neighbors': 7, 'weights': 'distance'}",0.80625,0.8023412204234122,KNeighborsClassifier
+2,"{'metric': 'manhattan', 'n_neighbors': 3, 'weights': 'uniform'}",0.44583333333333336,0.426450828399567,KNeighborsClassifier
+3,"{'metric': 'manhattan', 'n_neighbors': 3, 'weights': 'uniform'}",0.7625,0.7337744084797118,KNeighborsClassifier
+1,"{'criterion': 'entropy', 'max_depth': None, 'min_samples_split': 10}",0.8395833333333333,0.8357316906502398,DecisionTreeClassifier
+2,"{'criterion': 'entropy', 'max_depth': None, 'min_samples_split': 2}",0.5125,0.47813584409392296,DecisionTreeClassifier
+3,"{'criterion': 'entropy', 'max_depth': None, 'min_samples_split': 10}",0.71,0.6785378164335621,DecisionTreeClassifier
+1,{},0.6416666666666667,0.6560528671121609,GaussianNB
+2,{},0.3854166666666667,0.3808606554607082,GaussianNB
+3,{},0.655,0.617664195891876,GaussianNB
