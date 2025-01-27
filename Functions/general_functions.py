@@ -1,5 +1,8 @@
 import pandas as pd
 import numpy as np
+import ast
+import json
+import sklearn
 
 from sklearn.model_selection import train_test_split, KFold, GroupKFold, GridSearchCV, StratifiedGroupKFold
 from sklearn.metrics import accuracy_score, f1_score, make_scorer
@@ -12,6 +15,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 # from sklearn.neural_network import MLPClassifier
 from sklearn.naive_bayes import GaussianNB
+
 
 import warnings
 from sklearn.exceptions import ConvergenceWarning
@@ -44,20 +48,20 @@ def process_time_series(data, window_size, overlap, pref, feature_dicts, time_se
     total_windows = max(0, (len(data) - window_size) // step_size + 1)
 
     if len(data) < window_size:
-        print("Yo man, that window is too big")
         print(f"length of data is {len(data)}, where the length of the window is {window_size}")
-    
+        raise ValueError(f"Yo man, that window is too big")
+
     for step in range(0, total_windows):
         window = data[step*step_size : step*step_size + window_size]
         features = extract_features(window, prefix=pref)
         feature_dicts[step].update(features)
         ts = {}
 
-        ts[f'{pref}ts'] = window
+        ts[f'{pref}ts'] = list(window)
+        # ts = {f"{pref}ts": json.dumps(list(window))}
 
         time_series_dicts[step].update(ts)
 
-    
     return feature_dicts, time_series_dicts
 
 
@@ -149,7 +153,7 @@ def simple_models(data_df, k, split_type='random'):
                 X_train = scaler.fit_transform(X_train)
                 X_test = scaler.transform(X_test)
 
-                grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=k, scoring='accuracy', verbose=0)
+                grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring='accuracy', verbose=0)
                 grid_search.fit(X_train, y_train)
                 best_model = grid_search.best_estimator_
                 y_pred = best_model.predict(X_test)
@@ -170,12 +174,16 @@ def simple_models(data_df, k, split_type='random'):
                 X_train, y_train = train_df.drop(columns=['label', 'bearing_id']), train_df['label']
                 X_test, y_test = test_df.drop(columns=['label', 'bearing_id']), test_df['label']
 
+                # shuffle data
+                X_train, y_train = sklearn.utils.shuffle(X_train, y_train)
+                X_test, y_test = sklearn.utils.shuffle(X_test, y_test) 
+
                 # Scale features
                 scaler = StandardScaler()
                 X_train = scaler.fit_transform(X_train)
                 X_test = scaler.transform(X_test)
 
-                grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=k, scoring='accuracy', verbose=0)
+                grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring='accuracy', verbose=0)
                 grid_search.fit(X_train, y_train)
                 best_model = grid_search.best_estimator_
                 y_pred = best_model.predict(X_test)
@@ -195,12 +203,15 @@ def simple_models(data_df, k, split_type='random'):
                 X_train, y_train = train_df.drop(columns=['label', 'bearing_id']), train_df['label']
                 X_test, y_test = test_df.drop(columns=['label', 'bearing_id']), test_df['label']
 
+                # shuffle data
+                X_train, y_train = sklearn.utils.shuffle(X_train, y_train)
+                X_test, y_test = sklearn.utils.shuffle(X_test, y_test) 
                 # Scale features
                 scaler = StandardScaler()
                 X_train = scaler.fit_transform(X_train)
                 X_test = scaler.transform(X_test)
 
-                grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=k, scoring='accuracy', verbose=0)
+                grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring='accuracy', verbose=0)
                 grid_search.fit(X_train, y_train)
                 best_model = grid_search.best_estimator_
                 y_pred = best_model.predict(X_test)
@@ -211,6 +222,46 @@ def simple_models(data_df, k, split_type='random'):
                     'test_accuracy': accuracy_score(y_test, y_pred),
                     'f1_score': f1_score(y_test, y_pred, average='macro')
                 })
+
+        elif split_type == 'balanced_device':
+            # Balanced device-based split
+            device_class_dist = data_df.groupby('bearing_id')['label'].value_counts(normalize=True).unstack(fill_value=0)
+            sorted_devices = device_class_dist.index.tolist()
+
+            train_devices, test_devices = [], []
+            train_classes = pd.Series(0, index=device_class_dist.columns)
+            test_classes = pd.Series(0, index=device_class_dist.columns)
+
+            for device in sorted_devices:
+                if (train_classes + device_class_dist.loc[device]).max() < (test_classes + device_class_dist.loc[device]).max():
+                    train_devices.append(device)
+                    train_classes += device_class_dist.loc[device]
+                else:
+                    test_devices.append(device)
+                    test_classes += device_class_dist.loc[device]
+
+            train_df = data_df[data_df['bearing_id'].isin(train_devices)]
+            test_df = data_df[data_df['bearing_id'].isin(test_devices)]
+
+            X_train, y_train = train_df.drop(columns=['label', 'bearing_id']), train_df['label']
+            X_test, y_test = test_df.drop(columns=['label', 'bearing_id']), test_df['label']
+
+            # Scale features
+            scaler = StandardScaler()
+            X_train = scaler.fit_transform(X_train)
+            X_test = scaler.transform(X_test)
+
+            grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring='accuracy', verbose=0)
+            grid_search.fit(X_train, y_train)
+            best_model = grid_search.best_estimator_
+            y_pred = best_model.predict(X_test)
+
+            grid_search_results.append({
+                'fold': 1,  # Single split for this method
+                'best_params': grid_search.best_params_,
+                'test_accuracy': accuracy_score(y_test, y_pred),
+                'f1_score': f1_score(y_test, y_pred, average='macro')
+            })
         else:
             raise SyntaxError("Invalid 'split_type' parameter is used")
 
@@ -222,3 +273,125 @@ def simple_models(data_df, k, split_type='random'):
     # Combine results from all models
     final_results = pd.concat(all_results, ignore_index=True)
     return final_results
+  
+
+# def split_data(df, target_column, target_series='all', split_type='random', test_size=0.2, group_column=None, n_splits=3):
+#     """
+#     Split data using different techniques.
+
+#     Parameters:
+#     - df (pd.DataFrame): The input dataframe.
+#     - target_column (str): The name of the target column.
+#     - split_type (str): The splitting strategy ('random', 'group_kfold', 'stratified_group_kfold').
+#     - test_size (float): The proportion of the dataset to include in the test split (for random split).
+#     - group_column (str): Column name to define groups (required for group-based splits).
+#     - n_splits (int): Number of splits for K-Fold.
+
+#     Returns:
+#     - X_train, X_test, y_train, y_test: Training and testing sets for features and targets.
+#     """
+#     print('wtf is happening')
+
+#     # if len(target_series) == 0:
+#     if target_series == 'all':
+#         print('wtf is happening')
+#         X = df.iloc[:, :-2]
+#     else:
+#         X = df[target_series]
+#     y = df[target_column]
+
+    
+#     if isinstance(X.iloc[0], np.ndarray):
+#         X = np.vstack(X)
+#     else:
+#         X = X.values.reshape(-1, 1)
+
+#     if split_type == 'random':
+#         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
+#     elif split_type == 'group_kfold':
+#         if group_column is None:
+#             raise ValueError("group_column must be provided for group_kfold splitting.")
+#         gkf = GroupKFold(n_splits=n_splits)
+#         groups = df[group_column]
+#         train_idx, test_idx = next(gkf.split(X, y, groups=groups))
+#         X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
+#         y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+
+#     elif split_type == 'stratified_group_kfold':
+#         if group_column is None:
+#             raise ValueError("group_column must be provided for stratified_group_kfold splitting.")
+#         sgkf = StratifiedGroupKFold(n_splits=n_splits)
+#         groups = df[group_column]
+#         train_idx, test_idx = next(sgkf.split(X, y, groups=groups))
+#         X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
+#         y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+
+#     else:
+#         raise ValueError("Invalid split_type. Use 'random', 'group_kfold', or 'stratified_group_kfold'.")
+    
+#     # Scale features
+#     scaler = StandardScaler()
+#     X_train = scaler.fit_transform(X_train)
+#     X_test = scaler.transform(X_test)
+    
+#     return X_train, X_test, y_train, y_test
+
+
+def split_data(df, target_column, target_series='all', split_type='random', test_size=0.2, group_column=None, n_splits=3):
+    """
+    Split data using different techniques.
+
+    Parameters:
+    - df (pd.DataFrame): The input dataframe.
+    - target_column (str): The name of the target column.
+    - split_type (str): The splitting strategy ('random', 'group_kfold', 'stratified_group_kfold').
+    - test_size (float): The proportion of the dataset to include in the test split (for random split).
+    - group_column (str): Column name to define groups (required for group-based splits).
+    - n_splits (int): Number of splits for K-Fold.
+
+    Returns:
+    - X_train, X_test, y_train, y_test: Training and testing sets for features and targets.
+    """
+
+    # if len(target_series) == 0:
+    if target_series == 'all':
+        X = df.iloc[:, :-2]
+    else:
+        X = df[target_series]
+    y = df[target_column]
+
+    if split_type == 'random':
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
+    elif split_type == 'group_kfold':
+        if group_column is None:
+            raise ValueError("group_column must be provided for group_kfold splitting.")
+        gkf = GroupKFold(n_splits=n_splits)
+        groups = df[group_column]
+        train_idx, test_idx = next(gkf.split(X, y, groups=groups))
+        X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
+        y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+        # shuffle data
+        X_train, y_train = sklearn.utils.shuffle(X_train, y_train)
+        X_test, y_test = sklearn.utils.shuffle(X_test, y_test) 
+
+    elif split_type == 'stratified_group_kfold':
+        if group_column is None:
+            raise ValueError("group_column must be provided for stratified_group_kfold splitting.")
+        sgkf = StratifiedGroupKFold(n_splits=n_splits)
+        groups = df[group_column]
+        train_idx, test_idx = next(sgkf.split(X, y, groups=groups))
+        X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
+        y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+        # shuffle data
+        X_train, y_train = sklearn.utils.shuffle(X_train, y_train)
+        X_test, y_test = sklearn.utils.shuffle(X_test, y_test) 
+
+    else:
+        raise ValueError("Invalid split_type. Use 'random', 'group_kfold', or 'stratified_group_kfold'.")
+    
+    # Scale features
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+    
+    return X_train, X_test, y_train, y_test

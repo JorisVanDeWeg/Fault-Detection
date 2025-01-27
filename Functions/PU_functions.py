@@ -24,9 +24,9 @@ def deduce_labels_pu(bearing_id, classification_type):
         "KA16": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "OR", "characteristic": "Single Point"},
         "KA22": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "OR", "characteristic": "Single Point"},
         "KA30": {"fault_type": "Plastic Deformation: Indentations", "extent": "Distributed", "component": "OR", "characteristic": "Distributed"},
-        "KB23": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "OR", "characteristic": "Single Point"}, #+IR
-        "KB24": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "OR", "characteristic": "Single Point"}, #+IR
-        "KB27": {"fault_type": "Plastic Deformation: Indentations", "extent": "Distributed", "component": "IR", "characteristic": "Distributed"},# OR+
+        "KB23": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "Balls", "characteristic": "Single Point"}, #+IR
+        "KB24": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "Balls", "characteristic": "Single Point"}, #+IR
+        "KB27": {"fault_type": "Plastic Deformation: Indentations", "extent": "Distributed", "component": "Balls", "characteristic": "Distributed"},# OR+
         "KI04": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "IR", "characteristic": "Single Point"},
         "KI14": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "IR", "characteristic": "Single Point"},
         "KI16": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "IR", "characteristic": "Single Point"},
@@ -34,6 +34,25 @@ def deduce_labels_pu(bearing_id, classification_type):
         "KI18": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "IR", "characteristic": "Single Point"},
         "KI21": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "IR", "characteristic": "Single Point"}
     }
+
+        
+    # # Real damages labels (from Table 5)
+    # real_damage_labels = {
+    #     "KA04": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "OR", "characteristic": "Single Point"},
+    #     "KA15": {"fault_type": "Plastic Deformation: Indentations", "extent": "Single", "component": "OR", "characteristic": "Single Point"},
+    #     "KA16": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "OR", "characteristic": "Single Point"},
+    #     "KA22": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "OR", "characteristic": "Single Point"},
+    #     "KA30": {"fault_type": "Plastic Deformation: Indentations", "extent": "Distributed", "component": "OR", "characteristic": "Distributed"},
+    #     "KB23": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "OR", "characteristic": "Single Point"}, #+IR
+    #     "KB24": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "OR", "characteristic": "Single Point"}, #+IR
+    #     "KB27": {"fault_type": "Plastic Deformation: Indentations", "extent": "Distributed", "component": "IR", "characteristic": "Distributed"},# OR+
+    #     "KI04": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "IR", "characteristic": "Single Point"},
+    #     "KI14": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "IR", "characteristic": "Single Point"},
+    #     "KI16": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "IR", "characteristic": "Single Point"},
+    #     "KI17": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "IR", "characteristic": "Single Point"},
+    #     "KI18": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "IR", "characteristic": "Single Point"},
+    #     "KI21": {"fault_type": "Fatigue: Pitting", "extent": "Single", "component": "IR", "characteristic": "Single Point"}
+    # }
     
     # Artificial damages labels (from Table 4)
     artificial_damage_labels = {
@@ -73,7 +92,7 @@ def deduce_labels_pu(bearing_id, classification_type):
         if bearing_type == "Healthy":
             return 0
         else:
-            component_map = {"OR": 1, "IR": 2} #  "OR+IR": 3
+            component_map = {"OR": 1, "IR": 2, "Balls":3}
             return component_map[labels[bearing_id]['component']]
     
 
@@ -156,6 +175,8 @@ def load_pu_dataset(base_dir_list, window_duration, overlap, signal_indices, cla
                     else:
                         features_data = pd.concat([features_data, feature_dicts], ignore_index=True)
                         time_series_data = pd.concat([time_series_data, time_series_dicts], ignore_index=True)
+
+                    
     return features_data, time_series_data
 
 
@@ -163,9 +184,12 @@ def extract_sample_rate(raster):
     """
     Extract the sample rate from the 'Raster' field,
     """
+    if isinstance(raster, np.ndarray):
+        print(raster)
+        raster = raster.item()  # Extract the single element if it's a scalar array
     rate_mapping = {
         "Mech_4kHz": 4000,
-        "HostService": 63000,
+        "HostService": 62000,
         "Temp_1Hz": 1
     }
     return rate_mapping[raster]
